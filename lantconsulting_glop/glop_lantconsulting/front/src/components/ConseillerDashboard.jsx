@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./ConseillerDashboard.css";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "./api";
 
 const ConseillerDashboard = () => {
   const [conseiller, setConseiller] = useState(null);
@@ -9,16 +10,16 @@ const ConseillerDashboard = () => {
 
   useEffect(() => {
     if (user?.accountname) {
-      fetch(`http://localhost:8080/api/conseillers/mon-profile?accountname=${user.accountname}`)
+      fetch(`${API_BASE_URL}/api/conseillers/mon-profile?accountname=${user.accountname}`)
         .then((response) => response.json())
         .then((data) => {
-          setConseiller(data); // On stocke tout le conseiller
+          setConseiller(data);
         })
         .catch((error) => {
           console.error("Erreur lors du fetch du conseiller :", error);
         });
     }
-  }, [user?.accountname]); // ✅ Dépendance ajoutée
+  }, [user?.accountname]);
 
   if (!conseiller) {
     return <p>Chargement du tableau de bord...</p>;

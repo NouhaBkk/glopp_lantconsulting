@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Login.css';
+import API_BASE_URL from './api';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -10,18 +11,18 @@ const Login = ({ onLogin }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/api/auth/authenticate', {
+      const response = await fetch(`${API_BASE_URL}/auth/authenticate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accountname: username, password }),
       });
 
       const data = await response.json();
-      console.log(" Réponse du localhost:8080 :", data);
+      console.log("Réponse du backend :", data);
 
       if (response.ok) {
         if (!data.id) {
-          alert(" ERREUR : L'ID de l'utilisateur est manquant !");
+          alert("ERREUR : L'ID de l'utilisateur est manquant !");
           return;
         }
 
@@ -32,7 +33,7 @@ const Login = ({ onLogin }) => {
         };
 
         sessionStorage.setItem("user", JSON.stringify(loggedInUser));
-        console.log("🔹 Utilisateur stocké dans sessionStorage :", loggedInUser);
+        console.log("Utilisateur stocké dans sessionStorage :", loggedInUser);
         onLogin(loggedInUser);
 
         if (loggedInUser.roles.includes('ROLE_CONSEILLER') || loggedInUser.roles.includes('ROLE_ADVISOR')) {
@@ -45,17 +46,15 @@ const Login = ({ onLogin }) => {
         } else if (loggedInUser.roles.includes('ROLE_PARTNER')) {
           navigate('/partner/dashboard');
         } else if (loggedInUser.roles.includes('ROLE_DOCTOR')) {
-          console.log(" Redirection vers /doctor/dashboard");
           navigate('/doctor/dashboard');
         } else {
-          console.log(" Redirection vers l'espace personnel...");
           navigate('/espacepersonnel');
         }
       } else {
-        alert(data.message || ' Échec de l’authentification');
+        alert(data.message || 'Échec de l’authentification');
       }
     } catch (error) {
-      console.error(' Erreur lors de la connexion :', error);
+      console.error('Erreur lors de la connexion :', error);
       alert('Une erreur est survenue lors de la connexion.');
     }
   };

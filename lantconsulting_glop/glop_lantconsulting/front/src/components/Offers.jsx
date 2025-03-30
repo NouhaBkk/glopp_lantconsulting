@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './Offers.css';
-
+import API_BASE_URL from './api';
 
 const Offers = ({ onSubscribe }) => {
   const [offers, setOffers] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-const [selectedOffer, setSelectedOffer] = useState(null);
-
-// eslint-disable-next-line no-unused-vars
-const [subscriptionMessage, setSubscriptionMessage] = useState('');
+  const [selectedOffer, setSelectedOffer] = useState(null);
+  const [subscriptionMessage, setSubscriptionMessage] = useState('');
 
   useEffect(() => {
-    // Récupérer les offres dynamiquement via l'API
-    fetch('http://localhost:8080/api/offers')
+    fetch(`${API_BASE_URL}/offers`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch offers');
@@ -23,42 +19,21 @@ const [subscriptionMessage, setSubscriptionMessage] = useState('');
       .catch((error) => console.error('Error fetching offers:', error));
   }, []);
 
-  // const handleSubscribe = (offer) => {
-  //   setSelectedOffer(offer); // Assigner l'offre sélectionnée
-  //   setSubscriptionMessage(`Vous êtes inscrit à l'offre : ${offer.name}`);
-
-  //   // Appel de la fonction de souscription si nécessaire
-  //   if (onSubscribe) {
-  //     onSubscribe(offer.id);
-  //   }
-  // };
-
   return (
-    <div className="offers-container"
-      
-    >
+    <div className="offers-container">
       <h1>Nos Offres d'Assurance</h1>
       <div className="offers-list">
         {offers.length > 0 ? (
           offers.map((offer) => (
             <div key={offer.id} className="offer-card">
-<h2>{offer.title}</h2>
-<div className="price">
-  Prix : <span>{offer.price} € / mois</span>
-</div>
-
-
+              <h2>{offer.title}</h2>
+              <div className="price">
+                Prix : <span>{offer.price} € / mois</span>
+              </div>
               <div className="item-content">
                 <p className="item-description">{offer.description}</p>
               </div>
-              <div className="item-footer">
-                {/* <button
-                  className="btn item-btn"
-                  onClick={() => handleSubscribe(offer)}
-                >
-                  Souscrire
-                </button> */}
-              </div>
+              <div className="item-footer"></div>
             </div>
           ))
         ) : (

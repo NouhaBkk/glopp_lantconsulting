@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import API_BASE_URL from "./api";
 
 const ClientCaseUpload = () => {
   const [file, setFile] = useState(null);
@@ -19,7 +20,7 @@ const ClientCaseUpload = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/clientcases/${caseId}/upload`, {
+      const response = await fetch(`${API_BASE_URL}/api/clientcases/${caseId}/upload`, {
         method: "POST",
         body: formData,
       });

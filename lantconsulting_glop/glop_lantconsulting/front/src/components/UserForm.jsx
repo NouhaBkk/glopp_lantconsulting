@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import API_BASE_URL from './api'; // ✅ Import ajouté
 
 const UserForm = ({ onSubmit }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('ROLE_USER');
-  const [contracts, setContracts] = useState([]); // Liste des contrats disponibles
-  const [selectedContractId, setSelectedContractId] = useState(''); // Contrat sélectionné
+  const [contracts, setContracts] = useState([]);
+  const [selectedContractId, setSelectedContractId] = useState('');
 
-  // Récupérer la liste des contrats depuis le back-end
   useEffect(() => {
-    fetch("http://localhost:8080/api/contracts/allcontracts")
+    fetch(`${API_BASE_URL}/contracts/allcontracts`) // ✅ Utilisation d'API_BASE_URL
       .then((response) => response.json())
       .then((data) => setContracts(data))
       .catch((error) => console.error("Erreur lors de la récupération des contrats:", error));

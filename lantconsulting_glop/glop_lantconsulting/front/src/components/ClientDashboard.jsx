@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import API_BASE_URL from "./api";
 
 const ClientDashboard = () => {
   const [cases, setCases] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/clientcases/all")
+    fetch(`${API_BASE_URL}/api/clientcases/all`)
       .then((res) => res.json())
       .then((data) => setCases(data))
       .catch((error) => console.error("Erreur:", error));

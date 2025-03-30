@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-
+import API_BASE_URL from "./api";
 
 const AddPartner = () => {
   const [formData, setFormData] = useState({
@@ -29,7 +28,7 @@ const AddPartner = () => {
             region: country.region || "Autre"
           }));
 
-        countryList.sort((a, b) => a.name.localeCompare(b.name)); // Trie alphabétique
+        countryList.sort((a, b) => a.name.localeCompare(b.name));
         setCountries(countryList);
         setLoading(false);
       })
@@ -57,7 +56,7 @@ const AddPartner = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/partners/create", {
+      const response = await axios.post(`${API_BASE_URL}/partners/create`, {
         accountname: formData.accountname,
         password: formData.password,
         firstName: formData.firstname,
@@ -121,7 +120,6 @@ const AddPartner = () => {
           onChange={handleChange}
           required
         />
-
         {loading ? (
           <p>Chargement des pays...</p>
         ) : (
@@ -134,9 +132,7 @@ const AddPartner = () => {
             ))}
           </select>
         )}
-
         <input type="text" name="region" placeholder="Région" value={formData.region} readOnly />
-
         <button type="submit" className="btn-add-partner">
           Ajouter
         </button>

@@ -1,12 +1,11 @@
-//import React, { useState } from 'react';
 import React, { useState, useEffect } from 'react';
+import API_BASE_URL from './api';
 
 const ContractList = () => {
-  //const [contracts] = useState([]);
   const [contracts, setContracts] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8080/api/contracts/allcontracts")
+    fetch(`${API_BASE_URL}/api/contracts/allcontracts`)
       .then((response) => response.json())
       .then((data) => setContracts(data))
       .catch((error) => console.error("Error fetching contracts:", error));

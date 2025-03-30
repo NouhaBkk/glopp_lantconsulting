@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import API_BASE_URL from "./api"; // Assure-toi que ce fichier exporte bien l'URL backend
 
 const PartnerDashboard = () => {
   const [groupedCases, setGroupedCases] = useState({});
@@ -10,7 +11,7 @@ const PartnerDashboard = () => {
     if (!user?.accountname) return;
 
     setAccountname(user.accountname);
-    fetch(`http://localhost:8080/api/partners/cases/by-accountname?accountname=${user.accountname}`)
+    fetch(`${API_BASE_URL}/partners/cases/by-accountname?accountname=${user.accountname}`)
       .then((res) => res.json())
       .then((data) => {
         const grouped = {};
@@ -40,7 +41,7 @@ const PartnerDashboard = () => {
     formData.append("file", file);
     formData.append("sender", "PARTNER");
 
-    fetch(`http://localhost:8080/api/clientcases/${caseId}/documents`, {
+    fetch(`${API_BASE_URL}/clientcases/${caseId}/documents`, {
       method: "POST",
       body: formData,
     })
@@ -72,7 +73,7 @@ const PartnerDashboard = () => {
   };
 
   const updateStatus = (caseId, newStatus) => {
-    fetch(`http://localhost:8080/api/partners/clientcases/update/${caseId}`, {
+    fetch(`${API_BASE_URL}/partners/clientcases/update/${caseId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus }),
@@ -166,72 +167,77 @@ const PartnerDashboard = () => {
           <div key={client} style={styles.clientBlock}>
             <h3 style={styles.clientName}>👤 {client}</h3>
             <div style={styles.cardGrid}>
-              {cases.map((c) => (
-                <div key={c.id} style={styles.card}>
-                  <h4 style={styles.cardTitle}>Dossier #{c.id}</h4>
-                  <p><strong>Type :</strong> {c.assistanceType}</p>
-                  <p><strong>Description :</strong> {c.description}</p>
-                  <p>
-                    <strong>Statut :</strong>{" "}
-                    <span style={{
-                      backgroundColor: c.status === "Clôturé" ? "#dbeafe" : "#dcfce7",
-                      color: c.status === "Clôturé" ? "#1e40af" : "#15803d",
-                      padding: "2px 8px",
-                      borderRadius: "12px",
-                      fontWeight: 600,
-                      fontSize: "13px"
-                    }}>
-                      {c.status}
-                    </span>
-                  </p>
-                  <button
-                    style={{
-                      ...styles.button,
-                      backgroundColor: c.status === "Clôturé" ? "#9ca3af" : "#64748b",
-                      cursor: c.status === "Clôturé" ? "not-allowed" : "pointer",
-                    }}
-                    onClick={() => updateStatus(c.id, "Clôturé")}
-                    disabled={c.status === "Clôturé"}
-                  >
-                    Clôturer le dossier
-                  </button>
+              {cases.map((c) => {
+                const myDocs = c.documents.filter((doc) => doc.sender === "PARTNER");
+                const clientDocs = c.documents.filter((doc) => doc.sender === "CLIENT");
 
-                  <div style={{ marginTop: 15 }}>
-                    <strong>📁 Documents envoyés par moi :</strong>
-                    {renderDocuments(c.documents.filter(doc => doc.sender === "PARTNER"), c.id, "PARTNER")}
-
-                    <strong style={{ marginTop: 12, display: "block" }}>📁 Documents envoyés par le client :</strong>
-                    {renderDocuments(c.documents.filter(doc => doc.sender === "CLIENT"), c.id, "CLIENT")}
-                  </div>
-
-                  <form onSubmit={(e) => handleUpload(e, c.id)} style={{ marginTop: 15 }}>
-                    <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                      <label style={{
-                        backgroundColor: "#64748b",
-                        color: "white",
-                        padding: "8px 12px",
-                        borderRadius: "6px",
+                return (
+                  <div key={c.id} style={styles.card}>
+                    <h4 style={styles.cardTitle}>Dossier #{c.id}</h4>
+                    <p><strong>Type :</strong> {c.assistanceType}</p>
+                    <p><strong>Description :</strong> {c.description}</p>
+                    <p>
+                      <strong>Statut :</strong>{" "}
+                      <span style={{
+                        backgroundColor: c.status === "Clôturé" ? "#dbeafe" : "#dcfce7",
+                        color: c.status === "Clôturé" ? "#1e40af" : "#15803d",
+                        padding: "2px 8px",
+                        borderRadius: "12px",
                         fontWeight: 600,
-                        cursor: "pointer",
-                        border: "none",
-                        fontSize: "14px",
-                        display: "inline-block"
+                        fontSize: "13px"
                       }}>
-                        Sélectionner un fichier
-                        <input
-                          type="file"
-                          onChange={(e) => handleFileChange(e, c.id)}
-                          style={{ display: "none" }}
-                        />
-                      </label>
-                      <span style={{ fontSize: "13px", color: "#334155" }}>
-                        {selectedFiles[c.id]?.name || "Aucun fichier"}
+                        {c.status}
                       </span>
-                      <button type="submit" style={styles.button}>Envoyer</button>
+                    </p>
+                    <button
+                      style={{
+                        ...styles.button,
+                        backgroundColor: c.status === "Clôturé" ? "#9ca3af" : "#64748b",
+                        cursor: c.status === "Clôturé" ? "not-allowed" : "pointer",
+                      }}
+                      onClick={() => updateStatus(c.id, "Clôturé")}
+                      disabled={c.status === "Clôturé"}
+                    >
+                      Clôturer le dossier
+                    </button>
+
+                    <div style={{ marginTop: 15 }}>
+                      <strong>📁 Documents envoyés par moi :</strong>
+                      {renderDocuments(myDocs, c.id, "PARTNER")}
+
+                      <strong style={{ marginTop: 12, display: "block" }}>📁 Documents envoyés par le client :</strong>
+                      {renderDocuments(clientDocs, c.id, "CLIENT")}
                     </div>
-                  </form>
-                </div>
-              ))}
+
+                    <form onSubmit={(e) => handleUpload(e, c.id)} style={{ marginTop: 15 }}>
+                      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                        <label style={{
+                          backgroundColor: "#64748b",
+                          color: "white",
+                          padding: "8px 12px",
+                          borderRadius: "6px",
+                          fontWeight: 600,
+                          cursor: "pointer",
+                          border: "none",
+                          fontSize: "14px",
+                          display: "inline-block"
+                        }}>
+                          Sélectionner un fichier
+                          <input
+                            type="file"
+                            onChange={(e) => handleFileChange(e, c.id)}
+                            style={{ display: "none" }}
+                          />
+                        </label>
+                        <span style={{ fontSize: "13px", color: "#334155" }}>
+                          {selectedFiles[c.id]?.name || "Aucun fichier"}
+                        </span>
+                        <button type="submit" style={styles.button}>Envoyer</button>
+                      </div>
+                    </form>
+                  </div>
+                );
+              })}
             </div>
           </div>
         ))

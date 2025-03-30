@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./SubscriptionForm.css";
+import API_BASE_URL from "./api"; // ✅ Import de la base URL
 
 const SubscriptionForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const offerId = location.state?.offerId;
-  
+
   const [formData, setFormData] = useState({
     origine: "",
     destination: "",
     make: "",
     model: "",
   });
-  
+
   const [carbonEmission, setCarbonEmission] = useState(null);
 
   const handleChange = (e) => {
@@ -30,7 +31,7 @@ const SubscriptionForm = () => {
     }).toString();
 
     try {
-      const response = await fetch(`http://localhost:8080/api/co2/carbonEmission?${queryParams}`, {
+      const response = await fetch(`${API_BASE_URL}/co2/carbonEmission?${queryParams}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -51,15 +52,18 @@ const SubscriptionForm = () => {
   };
 
   const handleConfirmSubscription = async () => {
+    if (!offerId) {
+      alert("Aucune offre sélectionnée.");
+      return;
+    }
+
     try {
-      const response = await fetch(`http://localhost:8080/api/contracts/subscribe`, {
+      const response = await fetch(`${API_BASE_URL}/contracts/subscribe`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          offerId: offerId,
-        }),
+        body: JSON.stringify({ offerId }),
       });
 
       if (response.ok) {

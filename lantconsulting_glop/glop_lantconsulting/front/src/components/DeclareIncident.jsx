@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./DeclareIncident.css";
+import API_BASE_URL from "./api";
 
 const DeclareIncident = () => {
   const [clients, setClients] = useState([]);
   const [formData, setFormData] = useState({
-    userId: "",               // <-- renommé depuis clientId
+    userId: "",
     country: "",
     assistanceType: "",
     description: "",
@@ -14,13 +15,13 @@ const DeclareIncident = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-  const userIdFromURL = queryParams.get("clientId"); // l'URL garde clientId mais sera affecté à userId
+  const userIdFromURL = queryParams.get("clientId");
 
   useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem("user"));
     if (!user) return;
 
-    fetch(`http://localhost:8080/api/conseillers/mon-profile?accountname=${user.accountname}`)
+    fetch(`${API_BASE_URL}/conseillers/mon-profile?accountname=${user.accountname}`)
       .then((res) => res.json())
       .then((data) => {
         setClients(data.clients || []);
@@ -38,7 +39,7 @@ const DeclareIncident = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/api/clientcases/create", {
+      const response = await fetch(`${API_BASE_URL}/clientcases/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -62,8 +63,6 @@ const DeclareIncident = () => {
       <div className="incident-card">
         <h2>Déclarer un Incident</h2>
         <form onSubmit={handleSubmit} className="incident-form">
-
-          {/* Utilisateur concerné */}
           <label>Utilisateur concerné :</label>
           <select
             name="userId"
@@ -79,7 +78,6 @@ const DeclareIncident = () => {
             ))}
           </select>
 
-          {/* Pays */}
           <label>Pays de l'incident :</label>
           <input
             type="text"
@@ -90,7 +88,6 @@ const DeclareIncident = () => {
             required
           />
 
-          {/* Type d'assistance */}
           <label>Type d’assistance :</label>
           <select
             name="assistanceType"
@@ -106,7 +103,6 @@ const DeclareIncident = () => {
             <option value="Bagage perdu">Bagage perdu</option>
           </select>
 
-          {/* Description */}
           <label>Description :</label>
           <textarea
             name="description"

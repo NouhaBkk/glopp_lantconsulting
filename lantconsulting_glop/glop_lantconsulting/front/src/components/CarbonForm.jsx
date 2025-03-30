@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import "./CarbonForm.css"; // Un fichier CSS dédié pour ce composant
+import "./CarbonForm.css";
+import API_BASE_URL from "./api";
 
-const CarbonForm = ({ offerId,  offerPrice, accountname, onClose, onSubscriptionSuccess,onReadyToPay }) => {
+const CarbonForm = ({ offerId, offerPrice, accountname, onClose, onSubscriptionSuccess, onReadyToPay }) => {
   const [formType, setFormType] = useState("vehicle");
   const [compensate, setCompensate] = useState(false);
-const [treesToPlant, setTreesToPlant] = useState(null);
-const [compensationCost, setCompensationCost] = useState(null);
-const [availableMakes, setAvailableMakes] = useState([]);
-const [availableModels, setAvailableModels] = useState([]);
+  const [treesToPlant, setTreesToPlant] = useState(null);
+  const [compensationCost, setCompensationCost] = useState(null);
+  const [availableMakes, setAvailableMakes] = useState([]);
+  const [availableModels, setAvailableModels] = useState([]);
   const [carbonFormData, setCarbonFormData] = useState({
     origine: "",
     destination: "",
@@ -20,8 +21,9 @@ const [availableModels, setAvailableModels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const isCar = carbonFormData.transportType === "car";
+
   useEffect(() => {
-    fetch("http://localhost:8080/api/co2/getAllMakes")
+    fetch(`${API_BASE_URL}/api/co2/getAllMakes`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -36,7 +38,7 @@ const [availableModels, setAvailableModels] = useState([]);
 
   useEffect(() => {
     if (isCar && carbonFormData.make) {
-      fetch(`http://localhost:8080/api/co2/getAllModels?make=${carbonFormData.make}`)
+      fetch(`${API_BASE_URL}/api/co2/getAllModels?make=${carbonFormData.make}`)
         .then((res) => res.json())
         .then(data => {
           if (Array.isArray(data)) {
@@ -49,6 +51,7 @@ const [availableModels, setAvailableModels] = useState([]);
         .catch((err) => console.error("Erreur modèles:", err));
     }
   }, [carbonFormData.make, isCar]);
+
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setCarbonFormData({
@@ -87,7 +90,7 @@ const [availableModels, setAvailableModels] = useState([]);
           return;
         }
         const params = new URLSearchParams({ origin: origine, destination, make, model });
-        response = await fetch(`http://localhost:8080/api/co2/routeEmission?${params}`, {
+        response = await fetch(`${API_BASE_URL}/api/co2/routeEmission?${params}`, {
           method: "POST",
         });
       } else {
@@ -97,7 +100,7 @@ const [availableModels, setAvailableModels] = useState([]);
           return;
         }
         const params = new URLSearchParams({ origin: origine, destination, transportType });
-        response = await fetch(`http://localhost:8080/api/co2/estimateCO2?${params}`, {
+        response = await fetch(`${API_BASE_URL}/api/co2/estimateCO2?${params}`, {
           method: "POST",
         });
       }
@@ -106,31 +109,29 @@ const [availableModels, setAvailableModels] = useState([]);
         const emission = await response.json();
         setCarbonEmission(emission);
 
-        const reductionResponse = await fetch("http://localhost:8080/api/co2/getReducedPrice", {
+        const reductionResponse = await fetch(`${API_BASE_URL}/api/co2/getReducedPrice`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ co2_kg: emission, price: offerPrice }),
         });
-        
 
         if (reductionResponse.ok) {
           const finalPrice = await reductionResponse.json();
           setReducedPrice(finalPrice);
           if (compensate) {
-            const compensationResp = await fetch("http://localhost:8080/api/reforestation/estimate", {
+            const compensationResp = await fetch(`${API_BASE_URL}/api/reforestation/estimate`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ co2_kg: emission }),
             });
-          
+
             if (compensationResp.ok) {
               const data = await compensationResp.json();
               setTreesToPlant(data.trees);
               setCompensationCost(data.compensationCost);
-              setReducedPrice(prev => prev + data.compensationCost); // Ajoute la compensation au prix
+              setReducedPrice(prev => prev + data.compensationCost);
             }
           }
-        
         } else {
           setReducedPrice(null);
         }
@@ -143,8 +144,6 @@ const [availableModels, setAvailableModels] = useState([]);
       setLoading(false);
     }
   };
-
-
 
   return (
     <div className="modal">
@@ -160,17 +159,18 @@ const [availableModels, setAvailableModels] = useState([]);
             <input type="text" name="destination" placeholder="Lieu d'arrivée" value={carbonFormData.destination} onChange={handleFormChange} required />
 
             <select name="transportType" value={carbonFormData.transportType} onChange={handleFormChange} required>
-               <option value="">-- Choisissez un transport --</option>
-               <option value="train">Train</option>
-               <option value="car">Voiture</option>
-               <option value="plane_short">Avion (court-courrier)</option>
-               <option value="plane_long">Avion (long-courrier)</option>
-               <option value="bus">Bus</option>
-               <option value="bike">Vélo</option>
-               <option value="scooter">Trottinette</option>
-               <option value="walk">Marche</option>
-             </select>
-             {isCar && (
+              <option value="">-- Choisissez un transport --</option>
+              <option value="train">Train</option>
+              <option value="car">Voiture</option>
+              <option value="plane_short">Avion (court-courrier)</option>
+              <option value="plane_long">Avion (long-courrier)</option>
+              <option value="bus">Bus</option>
+              <option value="bike">Vélo</option>
+              <option value="scooter">Trottinette</option>
+              <option value="walk">Marche</option>
+            </select>
+
+            {isCar && (
               <>
                 <select name="make" value={carbonFormData.make} onChange={handleFormChange} required>
                   <option value="">-- Sélectionner une marque --</option>
@@ -186,58 +186,52 @@ const [availableModels, setAvailableModels] = useState([]);
                 </select>
               </>
             )}
-          
-           <label style={{ display: "block", marginTop: "10px" }}>
-  <input
-    type="checkbox"
-    checked={compensate}
-    onChange={(e) => setCompensate(e.target.checked)}
-  />
-  Je souhaite compenser mes émissions via la reforestation 🌱
-</label>
 
+            <label style={{ display: "block", marginTop: "10px" }}>
+              <input
+                type="checkbox"
+                checked={compensate}
+                onChange={(e) => setCompensate(e.target.checked)}
+              />
+              Je souhaite compenser mes émissions via la reforestation 🌱
+            </label>
 
-           <button type="submit" disabled={loading}>
-             {loading ? "Calcul..." : "Calculer l'empreinte carbone"}
-           </button>
-         </form>
-       ) : (
-         <div>
-           <p>Votre voyage génère environ <strong>{carbonEmission.toFixed(2)} kg</strong> de CO2.</p>
-           {compensate && treesToPlant !== null && (
-  <>
-    <p>🌳 Arbres à planter : <strong>{treesToPlant}</strong></p>
-    <p>💰 Coût de la compensation : <strong>{compensationCost.toFixed(2)} €</strong></p>
-  </>
-)}
+            <button type="submit" disabled={loading}>
+              {loading ? "Calcul..." : "Calculer l'empreinte carbone"}
+            </button>
+          </form>
+        ) : (
+          <div>
+            <p>Votre voyage génère environ <strong>{carbonEmission.toFixed(2)} kg</strong> de CO2.</p>
 
-{reducedPrice !== null && (
-  <p>Prix final après réduction : <strong>{reducedPrice.toFixed(2)} €</strong></p>
-)}
+            {compensate && treesToPlant !== null && (
+              <>
+                <p>🌳 Arbres à planter : <strong>{treesToPlant}</strong></p>
+                <p>💰 Coût de la compensation : <strong>{compensationCost.toFixed(2)} €</strong></p>
+              </>
+            )}
 
-<button
-  onClick={() => {
-    onReadyToPay({
-      reducedPrice,
-      compensationCost: compensationCost || 0,
-    });
-  }}
->
-  Payer
-</button>
+            {reducedPrice !== null && (
+              <p>Prix final après réduction : <strong>{reducedPrice.toFixed(2)} €</strong></p>
+            )}
 
+            <button
+              onClick={() => {
+                onReadyToPay({
+                  reducedPrice,
+                  compensationCost: compensationCost || 0,
+                });
+              }}
+            >
+              Payer
+            </button>
 
-
-<button onClick={onClose}>Annuler</button>
-
-         </div>
-       )}
-     </div>
-   </div>
- );
-
-
-
+            <button onClick={onClose}>Annuler</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default CarbonForm;

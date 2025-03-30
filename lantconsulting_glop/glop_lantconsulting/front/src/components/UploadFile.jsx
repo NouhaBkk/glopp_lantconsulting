@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./UploadFile.css";
+import API_BASE_URL from "./api"; // ✅ Ajout de l'import
 
 const UploadFile = () => {
   const { caseId } = useParams();
@@ -22,13 +23,10 @@ const UploadFile = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/clientcases/${caseId}/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/clientcases/${caseId}/upload`, {
+        method: "POST",
+        body: formData,
+      });
 
       if (response.ok) {
         const data = await response.json();
