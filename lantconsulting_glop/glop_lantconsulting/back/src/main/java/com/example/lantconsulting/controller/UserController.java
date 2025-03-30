@@ -18,7 +18,7 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllUsers() {
-        return accountService.getAllAccounts()
+        return accountService.getAllUsers()
                              .stream()
                              .filter(account -> account instanceof User)
                              .map(account -> (User) account)
