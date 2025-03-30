@@ -45,7 +45,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of( "http://frontend",       
+        configuration.setAllowedOrigins(List.of(    "https://lantconsulting-k7n8.onrender.com",
+                                                        "http://frontend",       
                                                     "http://localhost",   
                                                     "http://localhost:3000", 
                                                     "http://127.0.0.1"));
