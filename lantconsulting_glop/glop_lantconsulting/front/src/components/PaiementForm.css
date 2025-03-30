@@ -1,0 +1,78 @@
+.paiement-page-container {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to right, #74ebd5, #ACB6E5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.payment-form {
+  background-color: white;
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  width: 350px;
+}
+
+.payment-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #0077cc;
+}
+
+.payment-form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.payment-form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.payment-form .row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.payment-form .row input {
+  flex: 1;
+}
+
+.payment-form button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.payment-form button:hover {
+  background-color: #005fa3;
+}
+.success-message {
+  margin-top: 20px;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 15px;
+  color: #155724;
+  border-radius: 5px;
+  font-weight: 500;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

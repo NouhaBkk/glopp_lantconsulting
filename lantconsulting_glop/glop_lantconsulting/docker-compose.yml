@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./back
+    ports:
+      - "8080:8080"
+    networks:
+      - lantconsulting
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./front
+    ports:
+      - "80:80"
+    networks:
+      - lantconsulting
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: lantconsulting_db
+    ports:
+      - "5432:5432"
+    networks:
+      - lantconsulting
+
+networks:
+  lantconsulting:
+    driver: bridge

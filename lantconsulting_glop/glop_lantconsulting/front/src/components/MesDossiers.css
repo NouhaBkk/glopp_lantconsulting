@@ -1,0 +1,52 @@
+.mes-dossiers-container {
+    max-width: 900px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .upload-link {
+    text-decoration: none;
+    color: blue;
+    font-weight: bold;
+  }
+  
+  .upload-link:hover {
+    text-decoration: underline;
+  }
+  
+  .doc-link {
+    margin-right: 10px;
+    text-decoration: none;
+    color: green;
+  }
+  
+  .doc-link:hover {
+    text-decoration: underline;
+  }
+  
+  .btn-retour {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .btn-retour:hover {
+    background: #0056b3;
+  }
+  

@@ -1,0 +1,88 @@
+/* ConseillerDashboard.css */
+.conseiller-dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    min-height: 100vh;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.conseiller-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.conseiller-header h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ecf0f1;
+}
+
+.conseiller-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.conseiller-card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #f1c40f;
+}
+
+.client-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.client-card {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    width: 280px;
+    text-align: left;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.client-card:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px);
+}
+
+.client-card h3 {
+    color: #1abc9c;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.client-card p {
+    font-size: 0.9rem;
+    color: #ecf0f1;
+    margin: 3px 0;
+}
+
+.btn-refresh {
+    margin-top: 20px;
+    background: #e74c3c;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.btn-refresh:hover {
+    background: #c0392b;
+}

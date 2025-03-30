@@ -1,0 +1,179 @@
+.features2 {
+  background: #ffffff;
+  padding: 5rem 0;
+}
+
+.card {
+  background-color: #ffffff;
+  border-left: 6px solid #0077b6; /* Accent assurance */
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 119, 182, 0.1); /* Bleu léger */
+  padding: 25px 30px;
+  margin: 20px auto;
+  max-width: 900px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-content {
+  text-align: left;
+}
+
+.mbr-section-title {
+  color: #004e89;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.mbr-text {
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+ul {
+  padding-left: 25px;
+}
+
+ul li {
+  margin-bottom: 10px;
+  color: #444;
+}
+.visuel-section {
+  background-color: #fff;
+  padding: 60px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+}
+
+.visuel-card {
+  background: #f9f9f9;
+  border-radius: 16px;
+  width: 300px;
+  padding: 30px 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.visuel-card:hover {
+  transform: translateY(-5px);
+}
+
+.visuel-card img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+.visuel-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #003f7d;
+  margin-bottom: 10px;
+}
+
+.visuel-description {
+  font-size: 0.95rem;
+  color: #555;
+}
+.zigzag-section {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding: 60px 5%;
+  background-color: #ffffff;
+}
+
+.zigzag-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  padding: 0; /* ❌ Plus de padding inutile */
+  border-radius: 0; /* ❌ Plus de fond ou effet de carte */
+  box-shadow: none; /* ❌ Supprimer l’ombre */
+  min-height: auto;
+  transition: none;
+}
+
+.zigzag-block.left .zigzag-image {
+  order: 0;
+}
+
+.zigzag-block.left .zigzag-text {
+  order: 1;
+}
+
+.zigzag-block.right .zigzag-image {
+  order: 1;
+}
+
+.zigzag-block.right .zigzag-text {
+  order: 0;
+}
+
+.zigzag-image {
+  flex: 1;
+  max-width: 48%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zigzag-image img {
+  width: 100%;
+  max-width: 500px; /* ✅ limite la largeur */
+  max-height: 500px; /* ✅ limite la hauteur */
+  object-fit: contain; /* ✅ évite les coupures */
+  border-radius: 12px;
+}
+
+
+.zigzag-text {
+  flex: 1;
+  padding: 30px;
+  border: 2px solid #0077b6; /* ✅ Bordure bleue */
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 119, 182, 0.1); /* ✅ Ombre légère */
+  background-color: #ffffff; /* ✅ Fond blanc pour bien ressortir */
+}
+
+.zigzag-text h3 {
+  font-size: 2rem;
+  color: #003f7d;
+  margin-bottom: 15px;
+}
+
+.zigzag-text p {
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .zigzag-block {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .zigzag-image,
+  .zigzag-text {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .zigzag-text h3 {
+    font-size: 1.5rem;
+  }
+}
