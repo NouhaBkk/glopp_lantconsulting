@@ -1,12 +1,12 @@
-# Utiliser une image officielle de Java comme base
+# Étape 1 : build avec Maven
+FROM maven:3.8.5-openjdk-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean install -DskipTests
+
+# Étape 2 : run avec JDK léger
 FROM openjdk:17-jdk-slim
-
-# Ajouter le jar compilé dans le conteneur
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-
-# Exposer le port sur lequel l'application écoute
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-# Commande pour exécuter l'application Spring Boot
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
