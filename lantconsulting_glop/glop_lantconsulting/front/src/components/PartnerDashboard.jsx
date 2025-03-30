@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import API_BASE_URL from "./api"; // Assure-toi que ce fichier exporte bien l'URL backend
+import API_BASE_URL from "./api"; 
 
 const PartnerDashboard = () => {
   const [groupedCases, setGroupedCases] = useState({});

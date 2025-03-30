@@ -23,7 +23,7 @@ import PaiementForm from "./components/PaiementForm";
 import Viewer from "./components/Viewer"; 
 import Banner from './components/Banner';
 
-import API_BASE_URL from './api'; // ✅ ici
+import API_BASE_URL from './components/api'; 
 
 import './App.css';
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+import API_BASE_URL from "./api";
 
 const MesDossiers = () => {
   const [cases, setCases] = useState([]);
@@ -8,7 +9,7 @@ const MesDossiers = () => {
   const loadCases = useCallback(() => {
     if (!user?.id) return;
 
-    fetch(`http://localhost:8080/api/clientcases/by-user/${user.id}`)
+    fetch(`${API_BASE_URL}/clientcases/by-user/${user.id}`)
       .then((res) => res.json())
       .then(setCases)
       .catch(console.error);
@@ -34,7 +35,7 @@ const MesDossiers = () => {
     formData.append("file", file);
     formData.append("sender", "CLIENT");
 
-    fetch(`http://localhost:8080/api/clientcases/${caseId}/documents`, {
+    fetch(`${API_BASE_URL}/clientcases/${caseId}/documents`, {
       method: "POST",
       body: formData,
     })
@@ -55,7 +56,7 @@ const MesDossiers = () => {
     window.open(viewerUrl, "_blank");
 
     if (doc.sender === "PARTNER" && !doc.viewed) {
-      fetch(`http://localhost:8080/api/clientcases/${caseId}/documents/mark-viewed`, {
+      fetch(`${API_BASE_URL}/clientcases/${caseId}/documents/mark-viewed`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: doc.url, viewerRole: "CLIENT" }),

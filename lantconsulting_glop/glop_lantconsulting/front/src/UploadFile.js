@@ -1,5 +1,5 @@
 import { useState } from "react";
-import API_BASE_URL from "./api"; // Assure-toi d’avoir ce fichier avec l’URL backend
+import API_BASE_URL from "./components/api"; 
 
 export default function UploadFile() {
   const [file, setFile] = useState(null);
