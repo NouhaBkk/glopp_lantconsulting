@@ -15,6 +15,7 @@ const Login = ({ onLogin }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accountname: username, password }),
+        mode: 'no-cors'
       });
 
       const data = await response.json();
