@@ -24,7 +24,7 @@ export default function UploadFile() {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/files/upload`, {
+      const response = await fetch(`${API_BASE_URL}/files/upload`, {
         method: "POST",
         headers: {
           Accept: "application/json",

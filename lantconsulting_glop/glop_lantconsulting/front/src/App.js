@@ -56,7 +56,7 @@ function App() {
 
   const handleRegister = async (formData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -84,7 +84,7 @@ function App() {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/contracts/subscribe`, {
+      const response = await fetch(`${API_BASE_URL}/contracts/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
